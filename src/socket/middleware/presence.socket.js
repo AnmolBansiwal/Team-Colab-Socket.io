@@ -1,4 +1,4 @@
-const onlineUsers = require("./store/onlineUsers");
+const onlineUsers = require("../store/onlineUsers.js");
 
 const presenceHandler = (io, socket) => {
 

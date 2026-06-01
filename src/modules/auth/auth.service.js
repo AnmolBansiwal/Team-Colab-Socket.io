@@ -1,7 +1,7 @@
 const bcrypt= require("bcrypt");
 
 const jwt= require("jsonwebtoken");
-const user= require("../users/user.model");
+const User= require("../users/user.model");
 class AuthService{
     static async register(data){
         const existingUser= await User.findOne({
@@ -47,4 +47,4 @@ return {
 };
     }
 }
-module.export= AuthService;
+module.exports = AuthService;

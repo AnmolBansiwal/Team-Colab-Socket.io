@@ -4,6 +4,9 @@ const chatHandler= require("./chat.socket");
 const { connection } = require("mongoose");
 const initializeSocket= (io)=>{
     //socket auth
+    console.log("socketAuthMiddleware:", typeof socketAuthMiddleware);
+console.log("presenceHandler:", typeof presenceHandler);
+console.log("chatHandler:", typeof chatHandler);
     io.use(socketAuthMiddleware);
     io.on("connection",(socket)=>{
         console.log(`user connected: ${socket.user.name}`

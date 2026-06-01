@@ -1,22 +1,33 @@
-const jwt= require("jsonwebtoken");
-const User= require("../../modules/users/user.model");
+const socketAuthMiddleware = async (socket, next) => {
+  try {
+    console.log("HANDSHAKE AUTH:", socket.handshake.auth);
 
-const socketAuthMiddleware = async(socket, next)=>{
-    try{
-        const token= socket.handshake.auth.token;
-        if(!token){
-            return next(new Error("Authentication error: Token not provided")); 
-        }
-        const decoded= jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        if(!user){
-            return next(new Error("user not found"));
-        }
-        socket.user= user;
-        next();
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+      return next(
+        new Error("Authentication error: Token not provided")
+      );
     }
-    catch(err){
-        next(new Error("unauthorized"));
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return next(new Error("User not found"));
     }
-}
-module.exports= socketAuthMiddleware ;
+
+    socket.user = user;
+
+    next();
+
+  } catch (err) {
+    console.log(err);
+    next(new Error("Unauthorized"));
+  }
+};
+module.exports= socketAuthMiddleware;

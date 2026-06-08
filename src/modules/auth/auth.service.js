@@ -19,7 +19,7 @@ class AuthService{
         return user;
     }
     static async login(data){
-        const user= await user.findOne({
+        const user= await User.findOne({
             email: data.email
         });
         if(!user){

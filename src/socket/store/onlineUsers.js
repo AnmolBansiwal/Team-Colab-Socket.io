@@ -1,2 +1,2 @@
 const onlineUsers= new Map();
-module.export= onlineUsers;
+module.exports= onlineUsers;

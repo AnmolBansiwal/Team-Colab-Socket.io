@@ -7,17 +7,19 @@ class MessageServices{
             sender: data.sender,
             chat: data.chatId,
             content: data.content,
-            seenBY: [data.sender]
+            seenBY: [data.sender],
         });
         await Chat.findByIdAndUpdate(
             data.chatId,
             {
                 lastMessage: message._id
+                
             }
         );
         return await Message.findById(message._id)
-        .populate("Sender", "name email")
+        .populate("sender", "name email")
         .populate("chat");
+        console.log("chat_id:", chat);
     }
 
     static async getChatMessage(chatId){

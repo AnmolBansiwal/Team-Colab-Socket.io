@@ -4,6 +4,7 @@ const socketAuthMiddleware = async (socket, next) => {
   try {
     const token =
       socket.handshake.auth?.token ||
+      socket.handshake.query?.token ||
       socket.handshake.headers.authorization?.split(" ")[1] ||
       socket.handshake.headers.token;
 

@@ -1,8 +1,32 @@
+const MessageService= require("../modules/chat/message.service");
+const MessageStatusService= require("../modules/chat/message-status.service")
 const chatHandler = (io, socket) => {
 
   // JOIN CHAT
-  socket.on("chat:join", (chatId) => {
+  socket.on("chat:join", (chatId, callback) => {
+    console.log("chat:join received", {
+      userId: socket.user?._id,
+      chatId
+    });
+
+    if (!chatId) {
+      if (typeof callback === "function") {
+        callback({
+          success: false,
+          error: "chatId is required"
+        });
+      }
+      return;
+    }
+
     socket.join(chatId);
+
+    if (typeof callback === "function") {
+      callback({
+        success: true,
+        room: chatId
+      });
+    }
   });
 
   // TYPING
@@ -48,16 +72,20 @@ const chatHandler = (io, socket) => {
         }
       );
 
-      callback({
-        success: true,
-        message: deliveredMessage
-      });
+      if (typeof callback === "function") {
+  callback({
+    success: true,
+    message
+  });
+}
 
     } catch (err) {
-      callback({
-        success: false,
-        error: err.message
-      });
+     if (typeof callback === "function") {
+  callback({
+    success: false,
+    error: err.message
+  });
+}
     }
   });
 
